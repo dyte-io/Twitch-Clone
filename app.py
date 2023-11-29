@@ -151,7 +151,7 @@ async def get_livestreams(offset: LivestreamsPayload):
     return response.json()
 
 @app.post("/vote/{meeting_id}")
-async def vote(meeting_id: str):
+async def increment_vote(meeting_id: str):
     conn = connect_to_db()
     cur = conn.cursor()
     cur.execute("CREATE TABLE IF NOT EXISTS votes(ts TIMESTAMP DEFAULT current_timestamp, meeting_id VARCHAR(100) UNIQUE NOT NULL, likes INT DEFAULT 0, dislikes INT DEFAULT 0)")
@@ -200,7 +200,7 @@ class ImageLinkUploads(BaseModel):
     title: str
 
 @app.post("/img_link_upload/{meeting_id}")
-async def stats(meeting_id: str, image_props: ImageLinkUploads):
+async def upload_metadata(meeting_id: str, image_props: ImageLinkUploads):
     image_url = image_props.image_url
     title = image_props.title
     conn = connect_to_db()
@@ -213,8 +213,8 @@ async def stats(meeting_id: str, image_props: ImageLinkUploads):
     return {"success": True}
 
 
-@app.post("/img_link_upload")
-async def stats():
+@app.get("/img_link_upload")
+async def fetch_metadata():
     conn = connect_to_db()
     cur = conn.cursor()
     cur.execute("CREATE TABLE IF NOT EXISTS ls_metadata(ts TIMESTAMP DEFAULT current_timestamp, meeting_id VARCHAR(100), img_url VARCHAR(256), title VARCHAR(100))")

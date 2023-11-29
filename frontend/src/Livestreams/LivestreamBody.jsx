@@ -15,7 +15,7 @@ const LivestreamBody = () => {
 	const setLivestreamsToState = async () => {
 		const { data } = await getLivestreams(offset);
 		const rawThumbnailsDataRes = await fetch(`${SERVER_URL}/img_link_upload`, {
-			method: "POST",
+			method: "GET",
 			headers: { "Content-Type": "application/json" },
 		});
 		const thumbnails = await rawThumbnailsDataRes.json();
